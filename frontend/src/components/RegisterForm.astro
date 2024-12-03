@@ -1,4 +1,8 @@
-<form id="register-form" action="http://localhost:3000/api/users/register" method="post">
+<form
+  id="register-form"
+  action="http://localhost:3000/api/users/register"
+  method="post"
+>
   <div class="form-wrap">
     <label for="email">Email</label>
     <input type="email" id="email" name="email" required />
@@ -51,37 +55,37 @@
 </style>
 
 <script type="module">
-  const form = document.getElementById('register-form');
-  form.addEventListener('submit', async (event) => {
+  const form = document.getElementById("register-form");
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const formData = new FormData(form);
     const data = {
-      email: formData.get('email'),
-      username: formData.get('username'),
-      password: formData.get('password'),
+      email: formData.get("email"),
+      username: formData.get("username"),
+      password: formData.get("password"),
     };
 
     try {
       const response = await fetch(form.action, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-        credentials: 'include',
+        credentials: "include",
       });
 
       const result = await response.json();
 
       if (response.ok) {
-        alert('Account created successfully!');
-        window.location.href = '/login';
+        alert("Account created successfully!");
+        window.location.href = "/login";
         console.log(result);
       } else {
         alert(`Error: ${result.message}`);
       }
     } catch (error) {
       console.error(error);
-      alert('Something went wrong. Please try again.');
+      alert("Something went wrong. Please try again.");
     }
   });
 </script>

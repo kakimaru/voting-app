@@ -1,5 +1,24 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Chart from "../components/Chart.astro";
+
+const labels = ["January", "February", "March", "April", "May"];
+const datasets = [
+  {
+    label: "Dataset 1",
+    data: [10, 20, 30, 40, 50],
+    backgroundColor: "#FF6384", // Red
+    borderColor: "#FF6384",
+    fill: false,
+  },
+  {
+    label: "Dataset 2",
+    data: [15, 25, 35, 45, 55],
+    backgroundColor: "#36A2EB", // Blue
+    borderColor: "#36A2EB",
+    fill: false,
+  },
+];
 
 const title = "Home";
 ---
@@ -7,8 +26,10 @@ const title = "Home";
 <BaseLayout title={title}>
   <section>
     <h1>Poll Title</h1>
-    <h1 id="pollTitle">Loading...</h1> 
-    <div style="width: 800px;"><canvas id="barChart"></canvas></div>
+    <h1 id="pollTitle">Loading...</h1>
+    <div>
+      <Chart type="bar" labels={labels} datasets={datasets} />
+    </div>
   </section>
 </BaseLayout>
 

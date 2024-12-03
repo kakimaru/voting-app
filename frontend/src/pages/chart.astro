@@ -1,0 +1,73 @@
+---
+import type { ChartType } from "chart.js";
+
+// 仮データの定義
+const labels = ["January", "February", "March", "April", "May"];
+const colorPalette = [
+  "#FF6384", // Red
+  "#36A2EB", // Blue
+  "#FFCE56", // Yellow
+  "#4BC0C0", // Teal
+  "#9966FF", // Purple
+];
+
+const datasets = [
+  {
+    label: "Dataset 1",
+    data: [10, 20, 30, 40, 50],
+    backgroundColor: colorPalette[0],
+    borderColor: colorPalette[0],
+    fill: false,
+  },
+  {
+    label: "Dataset 2",
+    data: [15, 25, 35, 45, 55],
+    backgroundColor: colorPalette[1],
+    borderColor: colorPalette[2],
+    fill: false,
+  },
+];
+
+interface Props {
+  type: ChartType;
+}
+
+const { type = "bar" } = Astro.props; // デフォルトでバーグラフを使用
+---
+
+<chart-js
+  data-type={type}
+  data-labels={JSON.stringify(labels)}
+  data-datasets={JSON.stringify(datasets)}
+>
+  <div class="relative">
+    <canvas></canvas>
+  </div>
+</chart-js>
+
+<script>
+  import type { ChartType } from "chart.js";
+  import Chart from "chart.js/auto";
+
+  class ChartElement extends HTMLElement {
+    constructor() {
+      super();
+      const ctx = this.querySelector("canvas") as HTMLCanvasElement;
+      const type = this.dataset.type as ChartType;
+      const labels = JSON.parse(this.dataset.labels!);
+      const datasets = JSON.parse(this.dataset.datasets!);
+      new Chart(ctx, {
+        type,
+        data: {
+          labels,
+          datasets,
+        },
+        options: {
+          responsive: true,
+        },
+      });
+    }
+  }
+
+  customElements.define("chart-js", ChartElement);
+</script>
