@@ -1,0 +1,51 @@
+---
+
+---
+
+<form>
+  <div class="form-wrap">
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" />
+  </div>
+  <div class="form-wrap">
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" />
+  </div>
+  <button type="submit">Create Account</button>
+</form>
+
+<style>
+  form {
+    max-width: 480px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .form-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  label {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  input {
+    padding: 12px 16px;
+    border: 1px solid var(--color-grey);
+    background-color: var(--color-grey) ;
+    border-radius: 4px;
+  }
+
+  button {
+    padding: 12px 16px;
+    border: none;
+    background-color: blue;
+    color: var(--color-white);
+    border-radius: 4px;
+  }
+</style>
