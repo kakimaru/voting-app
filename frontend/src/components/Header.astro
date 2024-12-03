@@ -1,0 +1,32 @@
+---
+import "../styles/global.css";
+import Logo from "./Logo.astro";
+---
+
+<header>
+  <div class="headerInner">
+    <Logo />
+    <div>
+      <a href="/login">Login</a>
+      <a href="/register">Create Account</a>
+      <a href="/">Logout</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  header {
+    position: sticky;
+    top: 0;
+    background-color: var(--color-white);
+    padding: 8px 16px;
+  }
+
+  .headerInner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>

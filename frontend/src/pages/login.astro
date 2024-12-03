@@ -1,0 +1,30 @@
+---
+import LoginForm from "../components/LoginForm.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout>
+  <section>
+    <h1>Log in</h1>
+    <LoginForm />
+  </section>
+</BaseLayout>
+
+<style>
+  section {
+    padding: 80px 16px;
+    max-width: 1280px;
+    min-height: 100vh;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    place-items: center;
+  }
+
+  h1 {
+    font-size: 32px;
+    font-weight: bold;
+  }
+
+</style>

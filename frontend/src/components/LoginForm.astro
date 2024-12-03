@@ -1,0 +1,82 @@
+<form id="login-form" action="http://localhost:3000/api/users/login" method="post">
+    <div class="form-wrap">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required />
+    </div>
+    <div class="form-wrap">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required />
+    </div>
+    <button type="submit">Login</button>
+  </form>
+  
+  <style>
+    form {
+      max-width: 480px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+  
+    .form-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+  
+    label {
+      font-size: 14px;
+      font-weight: bold;
+    }
+  
+    input {
+      padding: 12px 16px;
+      border: 1px solid var(--color-grey);
+      background-color: var(--color-grey);
+      border-radius: 4px;
+    }
+  
+    button {
+      padding: 12px 16px;
+      border: none;
+      background-color: blue;
+      color: var(--color-white);
+      border-radius: 4px;
+    }
+  </style>
+  
+  <script type="module">
+    const form = document.getElementById('login-form');
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+  
+      const formData = new FormData(form);
+      const data = {
+        email: formData.get('email'),
+        password: formData.get('password'),
+      };
+  
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+          credentials: 'include',
+        });
+  
+        const result = await response.json();
+  
+        if (response.ok) {
+          alert('Login successful!');
+          window.location.href = '/';
+          console.log(result);
+        } else {
+          alert(`Error: ${result.message}`);
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Something went wrong. Please try again.');
+      }
+    });
+  </script>
