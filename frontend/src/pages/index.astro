@@ -7,38 +7,39 @@ const title = "Home";
 <BaseLayout title={title}>
   <section>
     <h1>Poll Title</h1>
+    <h1 id="pollTitle">Loading...</h1> 
     <div style="width: 800px;"><canvas id="barChart"></canvas></div>
   </section>
 </BaseLayout>
 
 <script is:inline type="module">
-  // import {Chart} from 'chart.js'
-  import {Chart} from 'https://cdn.jsdelivr.net/npm/chart.js';
+  const pollTitle = document.getElementById("pollTitle");
 
-
-  let barCtx = document.getElementById("barChart");
-  let barConfig = {
-    type: "bar",
-    data: {
-      labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-      datasets: [
-        {
-          data: [10, 19, 6, 8, 2, 11],
-          label: "label",
-          backgroundColor: [
-            "#ff0000",
-            "#0000ff",
-            "#ffff00",
-            "#008000",
-            "#800080",
-            "#ffa500",
-          ],
-          borderWidth: 1,
+  //Get user data
+  async function fetchUserData() {
+    try {
+      const response = await fetch("http://localhost:3000/api/users/profile", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
         },
-      ],
-    },
-  };
-  let barChart = new Chart(barCtx, barConfig);
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      pollTitle.textContent = `Welcome, ${data.username}!`;
+    } catch (error) {
+      console.error("Error loading user data:", error);
+      pollTitle.textContent = "Error loading user data.";
+    }
+  }
+
+  fetchUserData();
 </script>
 
 <style>
