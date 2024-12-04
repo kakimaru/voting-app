@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import connectDB from './config/db';
 import userRoutes from './routes/user.routes';
+import surveyRoutes from './routes/survey.routes';
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use(cookieParser());
 
 // Routes
 app.use('/api/users', userRoutes);
+app.use('/api/surveys', surveyRoutes);
 
 // Port
 const PORT = process.env.PORT || 5000;
