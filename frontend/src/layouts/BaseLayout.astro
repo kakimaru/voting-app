@@ -1,20 +1,7 @@
 ---
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
-
-// const res = await fetch('http://localhost:3000/api/check-auth', {
-//   method: "GET",
-//   credentials: 'include'
-// })
-
-// const data = await res.json()
-
-// let content;
-// if(data.authenticated) {
-//   content = `<slot />`
-// } else {
-//   content = `<p>Oops! Something wrong</p>`
-// }
+import "@fontsource/quantico";
 
 const siteTitle = "SnapVote | ";
 const { title } = Astro.props;
@@ -36,3 +23,9 @@ const { title } = Astro.props;
     </main>
   </body>
 </html>
+
+<style>
+  body {
+    font-family: "Quantico", sans-serif;
+  }
+</style>

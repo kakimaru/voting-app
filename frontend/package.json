@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
+    "@fontsource/quantico": "^5.1.0",
     "astro": "^4.16.16",
     "chart.js": "^4.4.7",
     "typescript": "^5.7.2"
