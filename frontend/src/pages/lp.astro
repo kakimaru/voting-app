@@ -1,0 +1,99 @@
+---
+import "@fontsource/quantico";
+import "../styles/global.css";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>SnapVote</title>
+  </head>
+  <body>
+    <main>
+      <div class="firstview">
+        <h1>SNAP VOTE</h1>
+        <p class="treatment1 btn">You can easily create a vote</p>
+        <p class="treatment2 btn">Share it with friends</p>
+        <p class="treatment3 btn">And see the results instantly</p>
+      </div>
+      <div class="mainBtns">
+        <div class="btnCard">
+          <a href="/login"><span>1</span>Login</a>
+        </div>
+        <div class="btnCard">
+          <a href="/register"><span>2</span>Start voting</a>
+        </div>
+        <div class="btnCard">
+          <a href="#"><span>3</span>How to use</a>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
+
+<style>
+  body {
+    font-family: "Quantico", sans-serif;
+  }
+  main {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    place-content: center;
+  }
+
+  h1 {
+    font-size: clamp(1rem, 13.89vw, 12.5rem);
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .firstview {
+    position: relative;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .mainBtns {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+  }
+
+  .btnCard {
+    
+  }
+
+  @media screen and (min-width: 1028px) {
+    .treatment1 {
+      position: absolute;
+      top: -10%;
+      left: -2%;
+      transform: rotate(-8deg);
+    }
+
+    .treatment2 {
+      position: absolute;
+      bottom: -4%;
+      left: 35%;
+    }
+
+    .treatment3 {
+      position: absolute;
+      bottom: -5%;
+      right: -12%;
+      transform: rotate(8deg);
+    }
+  }
+
+  .btn {
+    font-size: clamp(0.8rem, 1vw, 1rem);
+    padding: 16px 24px;
+    border-radius: 8px 8px 0 0;
+    border: 1px solid var(--color-black);
+    background-color: var(--color-white);
+  }
+</style>
