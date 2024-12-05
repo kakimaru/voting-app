@@ -13,10 +13,12 @@
     "@fontsource/quantico": "^5.1.0",
     "astro": "^4.16.16",
     "chart.js": "^4.4.7",
+    "socket.io-client": "^4.8.1",
     "typescript": "^5.7.2"
   },
   "devDependencies": {
     "@types/chart.js": "^2.9.41",
+    "@types/socket.io-client": "^3.0.0",
     "prettier": "^3.4.1",
     "prettier-plugin-astro": "^0.14.1"
   }

@@ -31,11 +31,16 @@ const surveySchema = new mongoose_1.Schema({
     },
     options: [{
             type: String,
-            required: true
+            required: true,
         }],
     creationDate: {
         type: Date,
-        default: Date.now
+        default: Date.now,
+    },
+    createdBy: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
     }
 });
 const Survey = mongoose_1.default.model('Survey', surveySchema);

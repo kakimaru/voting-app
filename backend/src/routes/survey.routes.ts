@@ -1,8 +1,11 @@
 import express from 'express';
-import { createSurvey } from '../controllers/survey.controller';
+import SurveyController from '../controllers/survey.controller';
+import authenticateToken from '../middleware/auth';
 
 const router = express.Router();
 
-router.post('/create', createSurvey);
+router.post('/create', authenticateToken, async (req, res) =>{
+  await SurveyController.createSurvey(req, res);
+});
 
 export default router;

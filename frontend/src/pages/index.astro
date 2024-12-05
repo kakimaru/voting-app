@@ -16,9 +16,11 @@ const title = "Home";
 </BaseLayout>
 
 <script is:inline type="module">
-  const pollTitle = document.getElementById("pollTitle");
+  import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
+  
 
-  //Get user data
+  const socket = io("http://localhost:3000");
+
   async function fetchUserData() {
     try {
       const response = await fetch("http://localhost:3000/api/users/profile", {
@@ -35,14 +37,29 @@ const title = "Home";
 
       const data = await response.json();
 
+      const pollTitle = document.getElementById("pollTitle");
       pollTitle.textContent = `Welcome, ${data.username}!`;
+
+      socket.emit("userConnected", { username: data.username });
+
     } catch (error) {
       console.error("Error loading user data:", error);
+      const pollTitle = document.getElementById("pollTitle");
       pollTitle.textContent = "Error loading user data.";
     }
   }
 
   fetchUserData();
+
+  socket.on("newUserConnected", (message) => {
+    console.log(message); 
+    alert(message);       
+  });
+
+  socket.on("welcome", (message) => {
+    console.log(message);
+    alert(message); 
+  });
 </script>
 
 <style>
