@@ -1,6 +1,11 @@
 ---
 import "@fontsource/quantico";
 import "../styles/global.css";
+import { Image } from "astro:assets";
+
+import loginImg from "../../src/images/login.png";
+import votingImg from "../../src/images/voting.png";
+import howtouseImg from "../../src/images/howtouse.png";
 ---
 
 <html lang="en">
@@ -19,15 +24,24 @@ import "../styles/global.css";
         <p class="treatment2 btn">Share it with friends</p>
         <p class="treatment3 btn">And see the results instantly</p>
       </div>
-      <div class="mainBtns">
-        <div class="btnCard">
-          <a href="/login"><span>1</span>Login</a>
-        </div>
-        <div class="btnCard">
-          <a href="/register"><span>2</span>Start voting</a>
-        </div>
-        <div class="btnCard">
-          <a href="#"><span>3</span>How to use</a>
+      <div class="startmenus">
+        <h2 class="sponly">Start menus</h2>
+        <div class="mainBtns">
+          <a href="/login" class="btnCard login">
+            <div class="btnLabel"><span class="number">1</span>Login</div>
+            <span class="line"></span>
+            <Image src={loginImg} alt="login" class="image" />
+          </a>
+          <a href="/register" class="btnCard start">
+            <div class="btnLabel"><span class="number">2</span>Start voting</div>
+            <span class="line"></span>
+            <Image src={votingImg} alt="start voting" class="image" />
+          </a>
+          <a href="#" class="btnCard howtouse">
+            <div class="btnLabel"><span class="number">3</span>How to use</div>
+            <span class="line"></span>
+            <Image src={howtouseImg} alt="How to use" class="image" />
+          </a>
         </div>
       </div>
     </main>
@@ -38,17 +52,22 @@ import "../styles/global.css";
   body {
     font-family: "Quantico", sans-serif;
   }
+
   main {
     height: 100vh;
     display: flex;
+    gap: 120px;
     flex-direction: column;
     place-content: center;
+    overflow: hidden;
+    padding: 0 24px;
   }
 
   h1 {
     font-size: clamp(1rem, 13.89vw, 12.5rem);
     font-weight: bold;
     text-align: center;
+    margin-bottom: 16px;
   }
 
   .firstview {
@@ -57,17 +76,152 @@ import "../styles/global.css";
     margin: 0 auto;
   }
 
+  .startmenus {
+    display: grid;
+    gap: 16px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-black);
+  }
+
+  h2 {
+    font-size: 20px;
+    max-width: 310px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .btn {
+    font-size: clamp(0.8rem, 1vw, 1rem);
+    padding: 8px 24px;
+    border-radius: 8px 8px 0 0;
+    border: 1px solid var(--color-black);
+    background-color: var(--color-white);
+  }
+
+  .treatment1 {
+    position: absolute;
+    left: -12%;
+  }
+  .treatment2 {
+    position: absolute;
+    bottom: -56px;
+    right: -12%;
+  }
+
+  .treatment3 {
+    position: absolute;
+    bottom: -84px;
+    left: 0;
+  }
+
   .mainBtns {
     display: flex;
-    position: fixed;
-    bottom: 0;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    max-width: 310px;
+    width: 100%;
+    margin: 0 auto;
   }
 
   .btnCard {
-    
+    padding: 8px 12px;
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+    border-radius: 8px;
+    text-decoration: none;
+    max-width: 100%;
+    width: 100%;
+    transition: all 0.3s ease;
+    align-items: center;
+    position: relative;
+  }
+
+  .btnCard:hover {
+    transform: translateY(-20px);
+  }
+
+  .btnLabel {
+    padding: 12px 16px;
+    background-color: var(--color-white);
+    border-radius: 8px 8px 0 0;
+    color: var(--color-black);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+  }
+
+  .number {
+    padding: 8px 12px;
+    border: 1px solid var(--color-black);
+    border-radius: 4px;
+  }
+
+  .login {
+    background-color: #5ec84e;
+  }
+
+  .login .line {
+    width: 100%;
+    border: 1px solid #15a200;
+  }
+
+  .start {
+    background-color: #456bff;
+  }
+
+  .start .line {
+    width: 100%;
+    border: 1px solid #2255f9;
+  }
+
+  .howtouse {
+    background-color: #ffc339;
+  }
+
+  .howtouse .line {
+    width: 100%;
+    border: 1px solid #e5a93c;
+  }
+
+  .image {
+    max-width: 80px;
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    right: 0;
   }
 
   @media screen and (min-width: 1028px) {
+    main {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      place-content: center;
+      overflow: hidden;
+      gap: 80px;
+    }
+
+    .firstview {
+      position: relative;
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .h1 {
+      margin-bottom: 0;
+    }
+
+    .btn {
+      padding: 16px 24px;
+    }
+
     .treatment1 {
       position: absolute;
       top: -10%;
@@ -77,6 +231,8 @@ import "../styles/global.css";
 
     .treatment2 {
       position: absolute;
+      top: auto;
+      right: auto;
       bottom: -4%;
       left: 35%;
     }
@@ -84,16 +240,63 @@ import "../styles/global.css";
     .treatment3 {
       position: absolute;
       bottom: -5%;
+      left: auto;
       right: -12%;
       transform: rotate(8deg);
     }
-  }
 
-  .btn {
-    font-size: clamp(0.8rem, 1vw, 1rem);
-    padding: 16px 24px;
-    border-radius: 8px 8px 0 0;
-    border: 1px solid var(--color-black);
-    background-color: var(--color-white);
+    .startmenus {
+      border-top: none;
+    }
+
+    .sponly {
+      display: none;
+    }
+
+    .mainBtns {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+      margin-bottom: -140px;
+      align-items: center;
+      justify-content: center;
+      max-width: 100%;
+    }
+
+    .btnCard {
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      max-width: 260px;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .btnLabel {
+      font-size: 24px;
+      width: 100%;
+    }
+
+    .login {
+      transform: rotate(-8deg);
+      margin-bottom: -50px;
+    }
+
+    .howtouse {
+      transform: rotate(8deg);
+      margin-bottom: -50px;
+    }
+
+    .image {
+      max-width: 200px;
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      position: inherit;
+    }
+
+    .start {
+      gap: 24px;
+    }
   }
 </style>
