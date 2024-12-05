@@ -16,6 +16,7 @@
     "typescript": "^5.7.2"
   },
   "devDependencies": {
+    "@types/chart.js": "^2.9.41",
     "prettier": "^3.4.1",
     "prettier-plugin-astro": "^0.14.1"
   }
