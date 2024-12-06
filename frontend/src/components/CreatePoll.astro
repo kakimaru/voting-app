@@ -1,6 +1,6 @@
 <form
   id="create-poll-form"
-  action="http://localhost:3000/api/surveys/create"
+  action="http://localhost:3000/api/surveys/create" 
   method="post"
 >
   <div class="form-wrap">
@@ -23,43 +23,41 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.socket.io/4.8.1/socket.io.esm.min.js"></script>
 <script>
+  import { io } from "socket.io-client";
   import Chart from "chart.js/auto";
-  import { BarController } from "chart.js/auto";
 
   interface PollData {
+    _id: string;
     question: string;
     options: string[];
+    user: { username: string };
+    votes: number[];
   }
 
   document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("create-poll-form") as HTMLFormElement;
-    const pollResultsContainer = document.getElementById(
-      "poll-results-container",
-    ) as HTMLDivElement;
-    const pollQuestion = document.getElementById(
-      "poll-question",
-    ) as HTMLHeadingElement;
-    const voteButtonsContainer = document.getElementById(
-      "vote-buttons",
-    ) as HTMLDivElement;
-    const ctx = (
-      document.getElementById("poll-chart") as HTMLCanvasElement
-    ).getContext("2d");
+    const pollResultsContainer = document.getElementById("poll-results-container") as HTMLDivElement;
+    const pollQuestion = document.getElementById("poll-question") as HTMLHeadingElement;
+    const voteButtonsContainer = document.getElementById("vote-buttons") as HTMLDivElement;
+    const ctx = (document.getElementById("poll-chart")as HTMLCanvasElement).getContext("2d");
 
-    let options = [];
-    let votes = [10, 5];
-    let chart: Chart | undefined;
+    let options: string[] = [];
+    let votes: number[] = []; 
+    let chart: Chart;
 
-    Chart.register(BarController as typeof BarController);
+    const socket = io("http://localhost:3000");
+
+    socket.on("newPoll", (data) => {
+      showPollResults(data);
+    });
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      const option1 = (document.getElementById("option1") as HTMLInputElement)
-        .value;
-      const option2 = (document.getElementById("option2") as HTMLInputElement)
-        .value;
+      const option1 = (document.getElementById("option1") as HTMLInputElement).value;
+      const option2 = (document.getElementById("option2")as HTMLInputElement).value;
       options.push(option1, option2);
 
       const data = {
@@ -79,24 +77,32 @@
 
         if (response.ok) {
           alert("Poll created successfully!");
+          socket.emit("newPoll", result); 
           showPollResults(result);
         } else {
           alert(`Error: ${result.message}`);
         }
+
+        // Reset options after poll creation
+        options = [];
       } catch (error) {
         console.error("Error:", error);
       }
     });
 
-    function showPollResults(data: PollData): void {
+    function showPollResults(data: PollData) {
       pollResultsContainer.style.display = "block";
       pollQuestion.textContent = data.question;
 
+      const createdByContainer = document.createElement("div");
+      createdByContainer.textContent = `Created by: ${data.user.username}`;
+      pollResultsContainer.appendChild(createdByContainer);
+
       voteButtonsContainer.innerHTML = "";
-      data.options.forEach((option, index) => {
+      data.options.forEach((option: string, index: number) => {
         const button = document.createElement("button");
         button.textContent = option;
-        button.onclick = () => vote(index);
+        button.onclick = () => vote(data, index);
         voteButtonsContainer.appendChild(button);
       });
 
@@ -104,39 +110,56 @@
         chart.destroy();
       }
 
-      chart = new Chart(ctx, {
-        type: "bar",
-        data: {
-          labels: data.options,
-          datasets: [
-            {
-              label: "Votes",
-              data: votes,
-              backgroundColor: ["#4caf50", "#ff9800"],
-              borderColor: ["#388e3c", "#f57c00"],
-              borderWidth: 1,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
+      const ctx = (document.getElementById("poll-chart") as HTMLCanvasElement).getContext("2d");
+      if (ctx) {
+        chart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: data.options,
+            datasets: [
+              {
+                label: "Votes",
+                data: data.votes, // Use data.votes to show the current votes
+                backgroundColor: ["#4caf50", "#ff9800"],
+                borderColor: ["#388e3c", "#f57c00"],
+                borderWidth: 1,
+              },
+            ],
           },
-        },
-      });
+          options: {
+            responsive: true,
+          },
+        });
+      } else {
+        console.error("Failed to get canvas context");
+      }
     }
 
-    function vote(optionIndex: number) {
-      votes[optionIndex] += 1;
-      updateChart();
+    async function vote(data: PollData, optionIndex: number) {
+      try {
+        const response = await fetch("http://localhost:3000/api/surveys/vote", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ surveyId: data._id, optionIndex }),
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          votes = result.votes; // Update votes with the result
+          updateChart();
+        } else {
+          const result = await response.json();
+          alert(`Error: ${result.message}`);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
 
     function updateChart() {
       if (chart) {
-        chart.data.datasets[0].data = votes;
+        chart.data.datasets[0].data = votes; // Update chart data with new votes
         chart.update();
       }
     }

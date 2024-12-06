@@ -13,5 +13,6 @@ router.post('/login', async (req, res) => {
   router.get('/profile',authenticateToken, async (req, res) => {
     await userController.userProfile(req, res);
   });
+  router.post('/logout',authenticateToken, userController.logout);
 
 export default router;
