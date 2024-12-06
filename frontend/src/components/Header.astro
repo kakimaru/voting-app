@@ -1,16 +1,14 @@
 ---
 import "../styles/global.css";
 import Logo from "./Logo.astro";
+
+// const res = await fetch('http://localhost:3000/api/users/check-login');
+// const { isLoggedIn } = await res.json();
 ---
 
 <header>
   <div class="headerInner">
     <Logo />
-    <div>
-      <a href="/login">Login</a>
-      <a href="/register">Create Account</a>
-      <a href="/login" id ="logout">Logout</a>`  
-    </div>`
   </div>
 </header>
 
@@ -19,7 +17,7 @@ import Logo from "./Logo.astro";
     position: sticky;
     top: 0;
     background-color: var(--color-white);
-    padding: 8px 16px;
+    padding: 12px 16px;
   }
 
   .headerInner {
@@ -31,27 +29,74 @@ import Logo from "./Logo.astro";
   }
 </style>
 
-<script type = "module">
-document.getElementById('logout').addEventListener('click', function(event) {
-  event.preventDefault(); // Prevenir la navegación por defecto
+<style is:global>
+  .logouBtn {
+    background-color: var(--color-black);
+    color: var(--color-white);
+    padding: 8px 24px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+  }
 
-  // Hacer la solicitud de logout al backend
-  fetch('http://localhost:3000/api/users/logout', {
-      method: 'POST',  // O el método que utilices para logout en tu backend
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      credentials: 'include' // Si usas cookies para manejar sesiones
-  })
-  .then(response => {
-      if (response.ok) {
-          // Redirigir al usuario a la página de inicio
-          window.location.href = '/login';
-      } else {
-          alert('Error al cerrar sesión');
+  .logouBtn:hover {
+    opacity: 0.7;
+    border-radius: 4px 4px 0 0;
+  }
+</style>
+
+<script is:inline type="module">
+  document.addEventListener("DOMContentLoaded", async () => {
+    const headerInner = document.querySelector(".headerInner");
+
+    if (!headerInner) return;
+
+    async function checkLoginStatus() {
+      try {
+        const res = await fetch("http://localhost:3000/api/users/check-login", {
+          method: "GET",
+          credentials: "include",
+        });
+        const { isLoggedIn } = await res.json();
+
+        if (isLoggedIn) {
+          const logoutLink = document.createElement("a");
+          logoutLink.href = "/lp";
+          logoutLink.id = 'logout';
+          logoutLink.textContent = "Logout";
+          logoutLink.className = "logouBtn";
+
+          headerInner.appendChild(logoutLink);
+        }
+      } catch (error) {
+        console.error("Error checking login status:", error);
       }
-  })
-  .catch(error => {
-      console.error('Error de conexión:', error);
+    }
+
+    checkLoginStatus();
   });
-});</script>
+  
+  document.getElementById('logout').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevenir la navegación por defecto
+
+    // Hacer la solicitud de logout al backend
+    fetch('http://localhost:3000/api/users/logout', {
+        method: 'POST',  // O el método que utilices para logout en tu backend
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include' // Si usas cookies para manejar sesiones
+    })
+    .then(response => {
+        if (response.ok) {
+            // Redirigir al usuario a la página de inicio
+            window.location.href = '/login';
+        } else {
+            alert('Error al cerrar sesión');
+        }
+    })
+    .catch(error => {
+        console.error('Error de conexión:', error);
+    });
+  });
+</script>

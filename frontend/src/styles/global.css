@@ -2,6 +2,15 @@
   --color-black: #000000;
   --color-white: #ffffff;
   --color-grey: #f6f6f6;
+
+  --color-green: #5ec84e;
+  --color-green-dark: #15a200;
+
+  --color-blue: #456bff;
+  --color-blue-dark: #2255f9;
+
+  --color-yellow: #ffc339;
+  --color-yellow-dark: #e5a93c;
 }
 
 * {

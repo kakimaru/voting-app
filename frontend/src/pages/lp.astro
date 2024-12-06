@@ -33,7 +33,9 @@ import howtouseImg from "../../src/images/howtouse.png";
             <Image src={loginImg} alt="login" class="image" />
           </a>
           <a href="/register" class="btnCard start">
-            <div class="btnLabel"><span class="number">2</span>Start voting</div>
+            <div class="btnLabel">
+              <span class="number">2</span>Start voting
+            </div>
             <span class="line"></span>
             <Image src={votingImg} alt="start voting" class="image" />
           </a>
@@ -139,7 +141,7 @@ import howtouseImg from "../../src/images/howtouse.png";
   }
 
   .btnCard:hover {
-    transform: translateY(-20px);
+    transform: translateY(-4px);
   }
 
   .btnLabel {
@@ -162,30 +164,30 @@ import howtouseImg from "../../src/images/howtouse.png";
   }
 
   .login {
-    background-color: #5ec84e;
+    background-color: var(--color-green);
   }
 
   .login .line {
     width: 100%;
-    border: 1px solid #15a200;
+    border: 1px solid var(--color-green-dark);
   }
 
   .start {
-    background-color: #456bff;
+    background-color: var(--color-blue);
   }
 
   .start .line {
     width: 100%;
-    border: 1px solid #2255f9;
+    border: 1px solid var(--color-blue-dark);
   }
 
   .howtouse {
-    background-color: #ffc339;
+    background-color: var(--color-yellow);
   }
 
   .howtouse .line {
     width: 100%;
-    border: 1px solid #e5a93c;
+    border: 1px solid var(--color-yellow-dark);
   }
 
   .image {
@@ -272,6 +274,10 @@ import howtouseImg from "../../src/images/howtouse.png";
       transition: all 0.3s ease;
     }
 
+    .btnCard:hover {
+      transform: translateY(-20px);
+    }
+
     .btnLabel {
       font-size: 24px;
       width: 100%;
@@ -295,8 +301,8 @@ import howtouseImg from "../../src/images/howtouse.png";
       position: inherit;
     }
 
-    .start {
-      gap: 24px;
+    .start .image {
+      margin-top: 24px;
     }
   }
 </style>
