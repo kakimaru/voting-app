@@ -25,4 +25,5 @@ router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* 
 router.get('/profile', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield userController.userProfile(req, res);
 }));
+router.post('/logout', auth_1.default, userController.logout);
 exports.default = router;

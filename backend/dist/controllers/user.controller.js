@@ -70,5 +70,15 @@ class UserController {
             }
         });
     }
+    // logout
+    logout(req, res) {
+        res.clearCookie('jwt', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', // Asegúrate de que esté en true en producción
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            maxAge: 0 // Establecer maxAge en 0 asegura que la cookie se elimine inmediatamente
+        });
+        res.status(200).json({ message: 'Logout successful' });
+    }
 }
 exports.default = UserController;

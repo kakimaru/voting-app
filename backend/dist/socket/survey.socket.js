@@ -17,7 +17,7 @@ class SurveySocket {
             socket.on('newPoll', (data) => {
                 console.log('New poll data received:', data);
                 // Emitir el evento 'newPoll' a todos los clientes conectados
-                this.io.emit('newPoll', data);
+                socket.broadcast.emit('newPoll', data);
             });
             // Escuchar desconexiones de clientes
             socket.on('disconnect', () => {

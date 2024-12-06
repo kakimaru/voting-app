@@ -9,8 +9,8 @@ import Logo from "./Logo.astro";
     <div>
       <a href="/login">Login</a>
       <a href="/register">Create Account</a>
-      <a href="/">Logout</a>
-    </div>
+      <a href="/login" id ="logout">Logout</a>`  
+    </div>`
   </div>
 </header>
 
@@ -30,3 +30,28 @@ import Logo from "./Logo.astro";
     align-items: center;
   }
 </style>
+
+<script type = "module">
+document.getElementById('logout').addEventListener('click', function(event) {
+  event.preventDefault(); // Prevenir la navegación por defecto
+
+  // Hacer la solicitud de logout al backend
+  fetch('http://localhost:3000/api/users/logout', {
+      method: 'POST',  // O el método que utilices para logout en tu backend
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      credentials: 'include' // Si usas cookies para manejar sesiones
+  })
+  .then(response => {
+      if (response.ok) {
+          // Redirigir al usuario a la página de inicio
+          window.location.href = '/login';
+      } else {
+          alert('Error al cerrar sesión');
+      }
+  })
+  .catch(error => {
+      console.error('Error de conexión:', error);
+  });
+});</script>
