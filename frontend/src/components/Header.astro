@@ -61,7 +61,8 @@ import Logo from "./Logo.astro";
 
         if (isLoggedIn) {
           const logoutLink = document.createElement("a");
-          logoutLink.href = "/logout";
+          logoutLink.href = "/lp";
+          logoutLink.id = 'logout';
           logoutLink.textContent = "Logout";
           logoutLink.className = "logouBtn";
 
