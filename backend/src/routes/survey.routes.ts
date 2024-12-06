@@ -11,4 +11,12 @@ router.post('/vote', authenticateToken, async (req, res) => {
   await SurveyController.vote(req, res);
 });
 
+router.get('/', authenticateToken, async (req, res) => {
+  await SurveyController.getSurveys(req, res);
+});
+
+router.delete('/:surveyId', authenticateToken, async (req, res) => {
+  await SurveyController.deleteSurvey(req, res);
+});
+
 export default router;

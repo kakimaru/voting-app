@@ -53,12 +53,6 @@ const login = async (req: Request, res: Response) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({ message: "Login successful" });
-  } catch (error) {
-    res.status(500).json({ message: "Error logging in", error });
-    return;
-  }
-};
 
 // user profile
 const userProfile = async (req: Request, res: Response) => {

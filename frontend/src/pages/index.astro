@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CreatePoll from "../components/CreatePoll.astro";
+import ShowAll from "../components/ShowAll.astro";
 
 const title = "Home";
 ---
@@ -11,6 +12,7 @@ const title = "Home";
     <h1 id="pollTitle">Loading...</h1>
     <div>
       <CreatePoll />
+      <ShowAll />
     </div>
   </section>
 </BaseLayout>
