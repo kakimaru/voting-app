@@ -22,4 +22,10 @@ router.post('/create', auth_1.default, (req, res) => __awaiter(void 0, void 0, v
 router.post('/vote', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield survey_controller_1.default.vote(req, res);
 }));
+router.get('/', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield survey_controller_1.default.getSurveys(req, res);
+}));
+router.delete('/:surveyId', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield survey_controller_1.default.deleteSurvey(req, res);
+}));
 exports.default = router;

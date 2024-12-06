@@ -1,0 +1,156 @@
+<div id="surveys-container">
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module">
+    document.addEventListener("DOMContentLoaded", async () => {
+  const surveysContainer = document.getElementById("surveys-container");
+  const response = await fetch("http://localhost:3000/api/surveys", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  const surveys = await response.json();
+  console.log(surveys);
+  console.log(surveys.length);
+
+  if (surveys.length > 0) {
+    surveys.forEach((survey) => {
+      const surveyElement = document.createElement("div");
+      surveyElement.classList.add("survey");
+      const questionElement = document.createElement("h3");
+      questionElement.textContent = survey.question;
+      surveyElement.appendChild(questionElement);
+      //Options
+      survey.options.forEach((option, index) => {
+        const button = document.createElement("button");
+        button.textContent = option;
+        button.onclick = () => vote(survey._id, index, surveyElement, survey); 
+        surveyElement.appendChild(button);
+      });
+
+      //Delete
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "Delete Survey";
+      deleteButton.onclick = () => deleteSurvey(survey._id);
+      surveyElement.appendChild(deleteButton);
+
+      const creatorElement = document.createElement("p");
+      creatorElement.textContent = `Created by: ${survey.user.username}`;
+      surveyElement.appendChild(creatorElement);
+
+      //Show votes
+      const canvas = document.createElement("canvas");
+      surveyElement.appendChild(canvas);
+      createChart(survey, canvas);
+
+      surveysContainer.appendChild(surveyElement);
+    });
+  } else {
+    surveysContainer.innerHTML = "<p>No surveys available</p>";
+  }
+});
+
+// Función para votar
+async function vote(surveyId, optionIndex, surveyElement, survey) {
+  try {
+    const response = await fetch("http://localhost:3000/api/surveys/vote", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ surveyId, optionIndex }),
+      credentials: "include",
+    });
+    if (response.ok) {
+      const result = await response.json();
+      survey.votes[optionIndex]++;
+      const buttons = surveyElement.querySelectorAll("button");
+      const voteCounts = surveyElement.querySelectorAll("span");
+      voteCounts.forEach((voteCount, index) => {
+        voteCount.textContent = `Votos: ${survey.votes[index]}`;
+      });
+      const canvas = surveyElement.querySelector("canvas");
+      updateChart(survey, canvas);
+    } else {
+      const result = await response.json();
+      alert(`Error: ${result.message}`);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
+       async function deleteSurvey(surveyId) {
+      const response = await fetch(`http://localhost:3000/api/surveys/${surveyId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        alert ("Survey deleted successfully!");
+        const surveyElement = document.getElementById(surveyId); 
+        window.location.reload();
+      if (surveyElement) {
+        surveyElement.remove(); 
+      }
+      } else {
+        const result = await response.json();
+        alert(`Error: ${result.message}`);
+      }
+    }
+
+function createChart(survey, canvas) {
+  const ctx = canvas.getContext("2d");
+
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: survey.options,
+      datasets: [
+        {
+          label: "Votes",
+          data: survey.votes,
+          backgroundColor: ["#4caf50", "#ff9800"], 
+          borderColor: ["#388e3c", "#f57c00"],
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+    },
+  });
+}
+
+function updateChart(survey, canvas) {
+  const ctx = canvas.getContext("2d");
+  const chart = Chart.getChart(canvas);
+  if (chart) {
+    chart.destroy(); 
+  }
+
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: survey.options,
+      datasets: [
+        {
+          label: "Votes",
+          data: survey.votes,
+          backgroundColor: ["#4caf50", "#ff9800"],
+          borderColor: ["#388e3c", "#f57c00"],
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+    },
+  });
+}
+</script>
