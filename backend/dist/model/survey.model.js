@@ -33,6 +33,10 @@ const surveySchema = new mongoose_1.Schema({
             type: String,
             required: true,
         }],
+    votes: [{
+            type: Number,
+            default: 0,
+        }],
     creationDate: {
         type: Date,
         default: Date.now,

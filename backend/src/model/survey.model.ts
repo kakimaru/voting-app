@@ -5,6 +5,7 @@ import { createDocumentRegistry } from 'typescript';
 interface ISurvey extends Document {
   question: string;
   options: string[];
+  votes: number[];
   creationDate: Date;
   createdBy: mongoose.Types.ObjectId;
 }
@@ -17,6 +18,10 @@ const surveySchema: Schema = new Schema({
   options: [{
     type: String,
     required: true,
+  }],
+  votes: [{
+    type: Number,
+    default: 0,
   }],
   creationDate: {
     type: Date,

@@ -19,4 +19,7 @@ const router = express_1.default.Router();
 router.post('/create', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield survey_controller_1.default.createSurvey(req, res);
 }));
+router.post('/vote', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield survey_controller_1.default.vote(req, res);
+}));
 exports.default = router;

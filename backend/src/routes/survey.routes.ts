@@ -7,5 +7,8 @@ const router = express.Router();
 router.post('/create', authenticateToken, async (req, res) =>{
   await SurveyController.createSurvey(req, res);
 });
+router.post('/vote', authenticateToken, async (req, res) => {
+  await SurveyController.vote(req, res);
+});
 
 export default router;
