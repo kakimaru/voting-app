@@ -6,9 +6,9 @@ import cookieParser from 'cookie-parser';
 import http from 'http';
 import {Server} from 'socket.io';
 import connectDB from './config/db';
-import userRoutes from './routes/user.routes';
 import surveyRoutes from './routes/survey.routes';
 import SurveySocket from './socket/survey.socket';
+import userRouter from './routes/user.routes';
 
 dotenv.config();
 
@@ -41,7 +41,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Routes
-app.use('/api/users', userRoutes);
+app.use('/api/users', userRouter);
 app.use('/api/surveys', surveyRoutes);
 
 

@@ -1,18 +1,14 @@
 //routes login,register and profile
-import { Router } from 'express';
-import UserController from '../controllers/user.controller';
-import authenticateToken from '../middleware/auth';
+import { Router } from "express";
+import authenticateToken from "../middleware/auth";
+import userController from "../controllers/user.controller";
 
-const router = Router();
-const userController = new UserController();
+const userRouter = Router();
 
-router.post('/register', userController.register);
-router.post('/login', async (req, res) => {
-    await userController.login(req, res);
-  });
-  router.get('/profile',authenticateToken, async (req, res) => {
-    await userController.userProfile(req, res);
-  });
-  router.post('/logout',authenticateToken, userController.logout);
+userRouter.post("/register", userController.register);
+userRouter.post("/login", userController.login);
+userRouter.get("/profile", authenticateToken, userController.userProfile);
+userRouter.post("/logout", authenticateToken, userController.logout);
+userRouter.get("/check-login", authenticateToken, userController.checkLogin);
 
-export default router;
+export default userRouter;

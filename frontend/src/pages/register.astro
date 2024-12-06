@@ -1,4 +1,5 @@
 ---
+import FormSubInfo from "../components/FormSubInfo.astro";
 import RegisterForm from "../components/RegisterForm.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
@@ -7,6 +8,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <section>
     <h1>Register Account</h1>
     <RegisterForm />
+    <FormSubInfo
+      message="Already have an account?"
+      href="/login"
+      linkText="Log in"
+    />
   </section>
 </BaseLayout>
 

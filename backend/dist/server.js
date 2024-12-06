@@ -11,9 +11,9 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
 const db_1 = __importDefault(require("./config/db"));
-const user_routes_1 = __importDefault(require("./routes/user.routes"));
 const survey_routes_1 = __importDefault(require("./routes/survey.routes"));
 const survey_socket_1 = __importDefault(require("./socket/survey.socket"));
+const user_routes_1 = __importDefault(require("./routes/user.routes"));
 dotenv_1.default.config();
 // Database
 (0, db_1.default)();
