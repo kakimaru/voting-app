@@ -1,0 +1,37 @@
+---
+const {
+  message = "Don't have an account?",
+  href = "/register",
+  linkText = "Register",
+} = Astro.props;
+---
+
+<div class="formSubInfo">
+  <p>{message}</p>
+  <a href={href} class="btn">{linkText}</a>
+</div>
+
+<style>
+  .formSubInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 480px;
+    width: 100%;
+  }
+
+  .btn {
+    text-decoration: none;
+    padding: 8px 16px;
+    border: 1px solid var(--color-black);
+    color: var(--color-black);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+
+  .btn:hover {
+    border-radius: 4px 4px 0 0;
+    background-color: var(--color-black);
+    color: var(--color-white);
+  }
+</style>
