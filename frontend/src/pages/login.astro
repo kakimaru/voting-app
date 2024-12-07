@@ -36,7 +36,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 <script is:inline type="module">
   document.addEventListener("DOMContentLoaded", async () => {
     const loadingElement = document.getElementById("loading");
-    const sectionElement = document.querySelector('section')
+    const sectionElement = document.querySelector("section");
 
     function showLoading() {
       loadingElement.style.display = "block";
@@ -55,28 +55,24 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           credentials: "include",
         });
 
-        if (!res.ok){ 
-          window.location.href = "/login"; 
-          return}
+        if (!res.ok) {
+          throw new Error(`Failed to check login`);
+        }
 
         const { isLoggedIn } = await res.json();
 
         if (isLoggedIn) {
           window.location.href = "/";
-          return
+          return;
         }
-        
-        window.location.href = "/login";
-
       } catch (error) {
         console.error("Error checking login status:", error);
       } finally {
-        hideLoading()
-        sectionElement.style.display = 'block'
+        hideLoading();
+        sectionElement.style.display = "block";
       }
     }
 
     checkLoginStatus();
   });
-
 </script>

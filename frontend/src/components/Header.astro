@@ -58,12 +58,48 @@ import Logo from "./Logo.astro";
 
         if (isLoggedIn) {
           const logoutLink = document.createElement("a");
-          logoutLink.href = "/lp";
+          // logoutLink.href = "/lp";
           logoutLink.id = "logout";
           logoutLink.textContent = "Logout";
           logoutLink.className = "logouBtn";
 
           headerInner.appendChild(logoutLink);
+
+          logoutLink.addEventListener("click", function (event) {
+            event.preventDefault(); // Prevenir la navegación por defecto
+        
+            fetch("http://localhost:3000/api/users/logout", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
+            })
+              .then((res) => {
+                if (res.ok) {
+                  return fetch("http://localhost:3000/api/users/check-login", {
+                    method: "GET",
+                    credentials: "include",
+                    headers: {
+                      "Cache-Control": "no-cache",
+                    },
+                  });
+                } else {
+                  throw new Error("Logout failed");
+                }
+              })
+              .then((res) => res.json())
+              .then((data) => {
+                if (!data.isLoggedIn) {
+                  window.location.href = "/lp";
+                } else {
+                  throw new Error("Still logged in, something went wrong.");
+                }
+              })
+              .catch((error) => {
+                console.error("Error during logout:", error);
+              });
+          });
         }
       } catch (error) {
         console.error("Error checking login status:", error);
@@ -71,29 +107,7 @@ import Logo from "./Logo.astro";
     }
 
     checkLoginStatus();
+    
   });
 
-  document.getElementById("logout").addEventListener("click", function (event) {
-    event.preventDefault(); // Prevenir la navegación por defecto
-
-    // Hacer la solicitud de logout al backend
-    fetch("http://localhost:3000/api/users/logout", {
-      method: "GET", // O el método que utilices para logout en tu backend
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include", // Si usas cookies para manejar sesiones
-    })
-      .then((response) => {
-        if (response.ok) {
-          // Redirigir al usuario a la página de inicio
-          window.location.href = "/login";
-        } else {
-          alert("Error al cerrar sesión");
-        }
-      })
-      .catch((error) => {
-        console.error("Error de conexión:", error);
-      });
-  });
 </script>
