@@ -2,11 +2,13 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CreatePoll from "../components/CreatePoll.astro";
 import ShowAll from "../components/ShowAll.astro";
+import Loading from "../components/Loading.astro";
 
 const title = "Home";
 ---
 
 <BaseLayout title={title}>
+  <Loading id="loading" />
   <section>
     <h1>Poll Title</h1>
     <h1 id="pollTitle">Loading...</h1>
@@ -18,8 +20,48 @@ const title = "Home";
 </BaseLayout>
 
 <script is:inline type="module">
+  document.addEventListener("DOMContentLoaded", async () => {
+    const loadingElement = document.getElementById("loading");
+    const sectionElement = document.querySelector('section')
+
+    function showLoading() {
+      loadingElement.style.display = "block";
+    }
+
+    function hideLoading() {
+      loadingElement.style.display = "none";
+    }
+
+    async function checkLoginStatus() {
+      try {
+        showLoading();
+
+        const res = await fetch("http://localhost:3000/api/users/check-login", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!res.ok) window.location.href = "/login";
+        else throw new Error(`Unexpected response status: ${res.status}`);
+
+        const { isLoggedIn } = await res.json();
+
+        if (!isLoggedIn) {
+          window.location.href = "/login";
+        }
+        
+      } catch (error) {
+        console.error("Error checking login status:", error);
+      } finally {
+        hideLoading()
+        sectionElement.style.display = 'block'
+      }
+    }
+
+    checkLoginStatus();
+  });
+
   import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
-  
 
   const socket = io("http://localhost:3000");
 
@@ -43,7 +85,6 @@ const title = "Home";
       pollTitle.textContent = `Welcome, ${data.username}!`;
 
       socket.emit("userConnected", { username: data.username });
-
     } catch (error) {
       console.error("Error loading user data:", error);
       const pollTitle = document.getElementById("pollTitle");
@@ -54,13 +95,13 @@ const title = "Home";
   fetchUserData();
 
   socket.on("newUserConnected", (message) => {
-    console.log(message); 
-    alert(message);       
+    console.log(message);
+    alert(message);
   });
 
   socket.on("welcome", (message) => {
     console.log(message);
-    alert(message); 
+    alert(message);
   });
 </script>
 
@@ -68,5 +109,6 @@ const title = "Home";
   section {
     min-height: 100vh;
     padding: 16px;
+    display: none;
   }
 </style>

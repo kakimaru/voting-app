@@ -1,5 +1,4 @@
-<div id="surveys-container">
-</div>
+<div id="surveys-container"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="module">
@@ -9,23 +8,27 @@
 
   socket.on("surveyDeleted", (surveyId) => {
     alert(`The survey with ID ${surveyId} has been deleted`);
-    const surveyElement = document.querySelector(`[data-survey-id="${surveyId}"]`);
+    const surveyElement = document.querySelector(
+      `[data-survey-id="${surveyId}"]`,
+    );
     if (surveyElement) {
       surveyElement.remove();
     }
   });
 
-  socket.on('voteUpdated', (data) => {
+  socket.on("voteUpdated", (data) => {
     const { surveyId, votes } = data;
-    const surveyElement = document.querySelector(`[data-survey-id="${surveyId}"]`);
+    const surveyElement = document.querySelector(
+      `[data-survey-id="${surveyId}"]`,
+    );
 
     if (surveyElement) {
-      const survey = surveys.find(s => s._id === surveyId); 
+      const survey = surveys.find((s) => s._id === surveyId);
       if (survey) {
-        survey.votes = votes; 
-        updateChart(survey, surveyElement.querySelector('canvas')); 
+        survey.votes = votes;
+        updateChart(survey, surveyElement.querySelector("canvas"));
 
-        const voteCounts = surveyElement.querySelectorAll('span');
+        const voteCounts = surveyElement.querySelectorAll("span");
         voteCounts.forEach((voteCount, index) => {
           voteCount.textContent = `Votes: ${survey.votes[index]}`;
         });
@@ -54,7 +57,6 @@
         const questionElement = document.createElement("h3");
         questionElement.textContent = survey.question;
         surveyElement.appendChild(questionElement);
-
 
         survey.options.forEach((option, index) => {
           const button = document.createElement("button");
@@ -101,7 +103,7 @@
       if (response.ok) {
         const result = await response.json();
         survey.votes[optionIndex]++;
-        socket.emit('vote', surveyId, optionIndex);
+        socket.emit("vote", surveyId, optionIndex);
 
         const voteCounts = surveyElement.querySelectorAll("span");
         voteCounts.forEach((voteCount, index) => {
@@ -119,18 +121,23 @@
     }
   }
   async function deleteSurvey(surveyId) {
-    const response = await fetch(`http://localhost:3000/api/surveys/${surveyId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `http://localhost:3000/api/surveys/${surveyId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
       },
-      credentials: "include",
-    });
+    );
 
     if (response.ok) {
       alert("Survey deleted successfully!");
       socket.emit("deleteSurvey", surveyId);
-      const surveyElement = document.querySelector(`[data-survey-id="${surveyId}"]`);
+      const surveyElement = document.querySelector(
+        `[data-survey-id="${surveyId}"]`,
+      );
       if (surveyElement) {
         surveyElement.remove();
       }
