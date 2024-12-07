@@ -20,7 +20,28 @@ class SurveySocket {
       socket.on('newPoll', (data) => {
         console.log('New poll data received:', data);
         
-        socket.broadcast.emit('newPoll', data);
+        this.io.emit('newPoll', data);
+      });
+
+      socket.on('deleteSurvey', (surveyId) => {
+        console.log(`Deleting survey with ID: ${surveyId}`);
+       this.io.emit('surveyDeleted', surveyId);
+      });
+
+      socket.on('vote', async (surveyId, optionIndex) => {
+        try {
+          const survey = await Survey.findById(surveyId); 
+          if (survey) {
+            survey.votes[optionIndex];
+            await survey.save();
+            this.io.emit('voteUpdated', {
+              surveyId,
+              votes: survey.votes,
+            });
+          }
+        } catch (error) {
+          console.error("Error al actualizar los votos:", error);
+        }
       });
 
       socket.on('disconnect', () => {

@@ -49,15 +49,14 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const token = jsonwebtoken_1.default.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET, { expiresIn: "1h" });
         res.cookie("jwt", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-            maxAge: 0
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            secure: process.env.NODE_ENV === "production",
+            maxAge: 24 * 60 * 60 * 1000,
         });
         res.status(200).json({ message: "Login successful" });
     }
     catch (error) {
-        res.status(500).json({ message: "Error logging in", error });
-        return;
+        res.status(500).json({ message: "Error logging in" });
     }
 });
 // user profile
@@ -79,9 +78,9 @@ const userProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.clearCookie("jwt", {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // Asegúrate de que esté en true en producción
+        secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        maxAge: 0, // Establecer maxAge en 0 asegura que la cookie se elimine inmediatamente
+        maxAge: 0,
     });
     res.status(200).json({ message: "Logout successful" });
 });

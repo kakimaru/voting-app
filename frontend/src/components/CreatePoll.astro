@@ -51,6 +51,7 @@
 
     socket.on("newPoll", (data) => {
       showPollResults(data);
+      window.location.reload();
     });
 
     form.addEventListener("submit", async (event) => {

@@ -26,32 +26,38 @@ const register = async (req: Request, res: Response) => {
 
 // login
 const login = async (req: Request, res: Response) => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) {
-      res.status(401).json({ message: "Invalid credentials" });
-      return;
-    }
-
-    const isMatch = await user.matchPassword(password);
-    if (!isMatch) {
-      res.status(401).json({ message: "Invalid credentials" });
-      return;
-    }
-
-    const token = jwt.sign(
-      { id: user._id, username: user.username },
-      process.env.JWT_SECRET!,
-      { expiresIn: "1h" }
-    );
-
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 24 * 60 * 60 * 1000,
-    });
+        try {
+          const { email, password } = req.body;
+          const user = await User.findOne({ email });
+          if (!user) {
+            res.status(401).json({ message: "Invalid credentials" });
+            return;
+          }
+      
+          const isMatch = await user.matchPassword(password);
+          if (!isMatch) {
+            res.status(401).json({ message: "Invalid credentials" });
+            return;
+          }
+      
+          const token = jwt.sign(
+            { id: user._id, username: user.username },
+            process.env.JWT_SECRET!,
+            { expiresIn: "1h" }
+          );
+      
+          res.cookie("jwt", token, {
+            httpOnly: true,
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            secure: process.env.NODE_ENV === "production",
+            maxAge: 24 * 60 * 60 * 1000,
+          });
+      
+          res.status(200).json({ message: "Login successful" });
+        } catch (error) {
+          res.status(500).json({ message: "Error logging in" });
+        }
+      };
 
 
 // user profile
@@ -73,9 +79,9 @@ const userProfile = async (req: Request, res: Response) => {
 const logout = async (req: Request, res: Response) => {
   res.clearCookie("jwt", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production", // Asegúrate de que esté en true en producción
+    secure: process.env.NODE_ENV === "production", 
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    maxAge: 0, // Establecer maxAge en 0 asegura que la cookie se elimine inmediatamente
+    maxAge: 0, 
   });
   res.status(200).json({ message: "Logout successful" });
 };
