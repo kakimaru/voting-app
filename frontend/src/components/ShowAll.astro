@@ -1,4 +1,7 @@
-<div id="surveys-container"></div>
+<section>
+  <h2>Join a poll</h2>
+  <div id="surveys-container" class="pollContainer"></div>
+</section>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="module">
@@ -47,44 +50,79 @@
     });
 
     surveys = await response.json();
-    console.log(surveys);
 
     if (surveys.length > 0) {
       surveys.forEach((survey) => {
+        // question
         const surveyElement = document.createElement("div");
         surveyElement.classList.add("survey");
         surveyElement.setAttribute("data-survey-id", survey._id);
         const questionElement = document.createElement("h3");
+        questionElement.classList.add("surveyTitle")
         questionElement.textContent = survey.question;
         surveyElement.appendChild(questionElement);
 
-        survey.options.forEach((option, index) => {
-          const button = document.createElement("button");
-          button.textContent = option;
-          button.onclick = () => vote(survey._id, index, surveyElement, survey);
-          surveyElement.appendChild(button);
+        // div
+        const infoWrapper = document.createElement("div");
+        infoWrapper.classList.add("infoWrapper");
 
-          const voteCount = document.createElement("span");
-          voteCount.textContent = `Votes: ${survey.votes[index]}`;
-          surveyElement.appendChild(voteCount);
-        });
+        // created by
+        const creatorElement = document.createElement("p");
+        creatorElement.classList.add("surveySubInfo")
+        creatorElement.textContent = `Created by: ${survey.user.username}`;
+        infoWrapper.appendChild(creatorElement);
 
         //Delete
         const deleteButton = document.createElement("button");
-        deleteButton.textContent = "Delete Survey";
+        deleteButton.classList.add("deleteBtn")
+        deleteButton.textContent = "Delete";
         deleteButton.onclick = () => deleteSurvey(survey._id);
-        surveyElement.appendChild(deleteButton);
+        infoWrapper.appendChild(deleteButton);
 
-        const creatorElement = document.createElement("p");
-        creatorElement.textContent = `Created by: ${survey.user.username}`;
-        surveyElement.appendChild(creatorElement);
-
+        surveyElement.appendChild(infoWrapper);
+        
         //Chart
         const canvas = document.createElement("canvas");
+        canvas.classList.add("chart")
         surveyElement.appendChild(canvas);
         createChart(survey, canvas);
-
         surveysContainer.appendChild(surveyElement);
+
+        // div
+        const optionsWrapper = document.createElement("div");
+        optionsWrapper.classList.add("optionsWrapper");
+        
+        // options
+        survey.options.forEach((option, index) => {
+          const colors = ["#456bff", "#5ec84e"];
+
+          // div
+          const optionWrapper = document.createElement("div");
+          optionWrapper.classList.add("optionWrapper");
+
+          // button
+          const button = document.createElement("button");
+          button.classList.add("optionBtn")
+          button.textContent = option;
+
+          const color= colors[index % colors.length]
+          button.style.borderColor = color;
+          button.style.color = color;
+          button.onclick = () => vote(survey._id, index, surveyElement, survey);
+          
+          // span
+          const voteCount = document.createElement("span");
+          voteCount.classList.add("voteCount")
+          voteCount.textContent = `Votes: ${survey.votes[index]}`;
+
+          optionWrapper.appendChild(button);
+          optionWrapper.appendChild(voteCount);
+
+          optionsWrapper.appendChild(optionWrapper)
+        });
+        
+        surveyElement.appendChild(optionsWrapper)
+
       });
     } else {
       surveysContainer.innerHTML = "<p>No hay encuestas disponibles</p>";
@@ -154,16 +192,21 @@
         labels: survey.options,
         datasets: [
           {
-            label: "Votes",
+            // label: "Votes",
             data: survey.votes,
-            backgroundColor: ["#4caf50", "#ff9800"],
-            borderColor: ["#388e3c", "#f57c00"],
+            backgroundColor: ["#456bff", "#5ec84e"],
+            borderColor: ["ffffff", "#ffffff"],
             borderWidth: 1,
           },
         ],
       },
       options: {
         responsive: true,
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
       },
     });
   }
@@ -180,17 +223,132 @@
         labels: survey.options,
         datasets: [
           {
-            label: "Votes",
+            // label: "Votes",
             data: survey.votes,
-            backgroundColor: ["#4caf50", "#ff9800"],
-            borderColor: ["#388e3c", "#f57c00"],
+            backgroundColor: ["#456bff", "#5ec84e"],
+            borderColor: ["ffffff", "#ffffff"],
             borderWidth: 1,
           },
         ],
       },
       options: {
         responsive: true,
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
       },
     });
   }
 </script>
+
+<style>
+  section {
+    margin-top: 48px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .pollContainer {
+    display: flex;
+    gap: 32px;
+    padding: 24px;
+    padding-left: 0;
+    overflow: scroll;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    flex-direction: row-reverse;
+  }
+</style>
+
+<style is:global>
+  .survey {
+    padding: 24px;
+    max-width: 480px;
+    min-width: 310px;
+    width: 100%;
+    border: 1px solid var(--color-grey-line);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex:  0 0 640px;
+  }
+  
+  .surveyTitle {
+    font-size: 18px;
+    width: 100%;
+  }
+
+  .infoWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .surveySubInfo {
+    font-size: 12px;
+  }
+
+  .deleteBtn {
+    padding: 4px 8px;
+    font-size: 12px;
+    border: 1px solid var(--color-red);
+    color: var(--color-red);
+    background-color: var(--color-white);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+
+  .deleteBtn:hover {
+    cursor: pointer;
+    background-color: var(--color-red);
+    color: var(--color-white);
+  }
+
+  .optionsWrapper {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .optionWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 40%;
+    width: 100%;
+    align-items: center;
+  }
+
+  .optionBtn {
+    padding: 8px 16px;
+    border-radius: 4px 4px 0 0;
+    width: 100%;
+    background-color: var(--color-white);
+    outline: none;
+    box-shadow: none;
+    font-size: 16px;
+    transition: all 0.3s ease;
+  }
+
+  .optionBtn:hover {
+    cursor: pointer;
+    transform: translateY(-6px);
+  }
+
+  .chart {
+    width: 100%;
+    height: 100%;
+  }
+
+  .voteCount {
+    font-size: 12px;
+  }
+</style>
