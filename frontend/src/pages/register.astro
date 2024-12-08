@@ -1,10 +1,12 @@
 ---
 import FormSubInfo from "../components/FormSubInfo.astro";
+import Loading from "../components/Loading.astro";
 import RegisterForm from "../components/RegisterForm.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout>
+  <Loading id="loading" />
   <section>
     <h1>Register Account</h1>
     <RegisterForm />
@@ -26,6 +28,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     flex-direction: column;
     gap: 24px;
     place-items: center;
+    display: none;
   }
 
   h1 {
@@ -33,3 +36,47 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     font-weight: bold;
   }
 </style>
+
+<script is:inline type="module">
+  document.addEventListener("DOMContentLoaded", async () => {
+    const loadingElement = document.getElementById("loading");
+    const sectionElement = document.querySelector("section");
+
+    function showLoading() {
+      loadingElement.style.display = "block";
+    }
+
+    function hideLoading() {
+      loadingElement.style.display = "none";
+    }
+
+    async function checkLoginStatus() {
+      try {
+        showLoading();
+
+        const res = await fetch("http://localhost:3000/api/users/check-login", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!res.ok) {
+          throw new Error(`Failed to check login`);
+        }
+
+        const { isLoggedIn } = await res.json();
+
+        if (isLoggedIn) {
+          window.location.href = "/";
+          return;
+        }
+      } catch (error) {
+        console.error("Error checking login status:", error);
+      } finally {
+        hideLoading();
+        sectionElement.style.display = "flex";
+      }
+    }
+
+    checkLoginStatus();
+  });
+</script>
