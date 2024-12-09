@@ -27,6 +27,7 @@ class SurveyController {
                     question,
                     options,
                     votes: Array(req.body.options.length).fill(0),
+                    colors: req.body.colors || Array(req.body.options.length).fill('#456bff'),
                     createdBy: userId,
                 });
                 yield survey.save();
@@ -105,6 +106,7 @@ class SurveyController {
                             question: 1,
                             options: 1,
                             votes: 1,
+                            colors: 1,
                             'user.username': 1,
                         },
                     },

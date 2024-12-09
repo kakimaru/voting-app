@@ -9,12 +9,15 @@
       <label for="question">Question</label>
       <input type="text" id="question" name="question" required />
     </div>
-    <div class="form-wrap">
+    <div class="form-wrap" id="options-wrap">
       <label for="option1">Option 1</label>
       <input type="text" id="option1" name="option1" required />
+      <input type="color" id="color1" name="color1" required />
       <label for="option2">Option 2</label>
       <input type="text" id="option2" name="option2" required />
+      <input type="color" id="color2" name="color2" required />
     </div>
+    <button type="button" id="add-option-btn">Add Option</button>
     <button type="submit">Create Poll</button>
   </form>
 
@@ -57,7 +60,54 @@
     options: string[];
     user: { username: string };
     votes: number[];
+    colors: string[];
   }
+
+  //Add option button
+  const addOptionButton = document.getElementById("add-option-btn") as HTMLButtonElement;
+  addOptionButton.addEventListener("click", () => {
+    const optionsWrap = document.getElementById("options-wrap") as HTMLDivElement;
+    const option1 = (document.getElementById("option1") as HTMLInputElement).value;
+    const option2 = (document.getElementById("option2") as HTMLInputElement).value;
+
+    if (option1 && option2) {
+      const optionInputs = Array.from(optionsWrap.querySelectorAll('input[type="text"]')).length;
+    const mainoption = optionInputs + 1;
+
+    const optionLabel = document.createElement("label");
+    optionLabel.textContent = `Option ${mainoption}`;
+    optionsWrap.appendChild(optionLabel);
+
+    const optionInput = document.createElement("input");
+    optionInput.type = "text";
+    optionInput.name = `option${mainoption}`;
+    optionInput.required = true;
+    optionInput.style.padding = "12px 16px";
+    optionInput.style.border = "1px solid var(--color-grey)";
+    optionInput.style.backgroundColor = "var(--color-grey)";
+    optionInput.style.borderRadius = "4px";
+    optionInput.style.marginBottom = "8px";
+    optionsWrap.appendChild(optionInput);
+  }
+
+
+
+      const colorInput = document.createElement("input");
+      colorInput.type = "color";
+      colorInput.name = `color${optionsWrap.childElementCount + 1}`;
+      colorInput.required = true;
+      colorInput.style.padding = "0";
+colorInput.style.border = "none"; 
+colorInput.style.width = "30px";
+colorInput.style.height = "30px"; 
+colorInput.style.borderRadius = "50%";
+colorInput.style.cursor = "pointer"; 
+colorInput.style.backgroundColor = "transparent"; 
+colorInput.style.webkitAppearance = "none";
+
+      optionsWrap.appendChild(colorInput);
+    }
+  );
 
   document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("create-poll-form") as HTMLFormElement;
@@ -75,6 +125,7 @@
     ).getContext("2d");
 
     let options: string[] = [];
+    let colors: string[] = [];
     let votes: number[] = [];
     let chart: Chart;
 
@@ -88,15 +139,29 @@
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      const option1 = (document.getElementById("option1") as HTMLInputElement)
-        .value;
-      const option2 = (document.getElementById("option2") as HTMLInputElement)
-        .value;
-      options.push(option1, option2);
+      const optionsinput = document.getElementById("options-wrap");
+if (optionsinput) {
+  optionsinput.querySelectorAll("input[type='text']").forEach((input:any) => {
+    if (input.value) {
+      options.push(input.value); 
+    }
+  });
+  const colorsinput = document.getElementById("options-wrap");
+  if (colorsinput) {
+    colorsinput.querySelectorAll("input[type='color']").forEach((input:any) => {
+      if (input.value) {
+        colors.push(input.value); 
+      }
+    });
+  }
+}
+
 
       const data = {
         question: form.question.value,
         options: options,
+        colors: colors,
+        votes: votes
       };
 
       try {
@@ -118,6 +183,7 @@
         }
 
         options = [];
+        colors = [];
       } catch (error) {
         console.error("Error:", error);
       }
@@ -155,7 +221,7 @@
               {
                 label: "Votes",
                 data: data.votes,
-                backgroundColor: ["#4caf50", "#ff9800"],
+                backgroundColor: data.colors,
                 borderColor: ["#388e3c", "#f57c00"],
                 borderWidth: 1,
               },
@@ -231,6 +297,8 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+    height: 300px;
+    overflow-y: scroll;
   }
 
   .form-wrap {
@@ -267,4 +335,16 @@
     cursor: pointer;
     opacity: 0.7;
   }
+
+  input[type="color"] {
+  padding: 0;
+  border: none;
+  width: 30px;
+  height: 30px; 
+  border-radius: 50%; 
+  cursor: pointer;
+  background-color: transparent;
+  -webkit-appearance: none; 
+}
+
 </style>

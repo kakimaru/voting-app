@@ -20,7 +20,7 @@
   });
 
   socket.on("voteUpdated", (data) => {
-    const { surveyId, votes } = data;
+    const { surveyId, votes} = data;
     const surveyElement = document.querySelector(
       `[data-survey-id="${surveyId}"]`,
     );
@@ -105,7 +105,7 @@
           button.classList.add("optionBtn")
           button.textContent = option;
 
-          const color= colors[index % colors.length]
+          const color= survey.colors[index]
           button.style.borderColor = color;
           button.style.color = color;
           button.onclick = () => vote(survey._id, index, surveyElement, survey);
@@ -125,7 +125,7 @@
 
       });
     } else {
-      surveysContainer.innerHTML = "<p>No hay encuestas disponibles</p>";
+      surveysContainer.innerHTML = "<p>No surveys available</p>";
     }
   });
 
@@ -186,6 +186,7 @@
   }
   function createChart(survey, canvas) {
     const ctx = canvas.getContext("2d");
+    console.log (survey)
     new Chart(ctx, {
       type: "bar",
       data: {
@@ -194,7 +195,7 @@
           {
             // label: "Votes",
             data: survey.votes,
-            backgroundColor: ["#456bff", "#5ec84e"],
+            backgroundColor:survey.colors,
             borderColor: ["ffffff", "#ffffff"],
             borderWidth: 1,
           },
@@ -225,7 +226,7 @@
           {
             // label: "Votes",
             data: survey.votes,
-            backgroundColor: ["#456bff", "#5ec84e"],
+            backgroundColor: survey.colors,
             borderColor: ["ffffff", "#ffffff"],
             borderWidth: 1,
           },

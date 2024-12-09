@@ -19,6 +19,7 @@ class SurveyController {
         question,
         options,
         votes:Array(req.body.options.length).fill(0),
+        colors: req.body.colors || Array(req.body.options.length).fill('#456bff'),
         createdBy: userId,
       });
   
@@ -64,7 +65,6 @@ class SurveyController {
 async vote(req: Request, res: Response) {
   try {
     const { surveyId, optionIndex } = req.body;
-
     const survey = await Survey.findById(surveyId);
     if (!survey) {
       return res.status(404).json({ message: 'Survey not found' });
@@ -101,6 +101,7 @@ async getSurveys(req: Request, res: Response) {
           question: 1,
           options: 1,
           votes: 1,
+          colors: 1,
           'user.username': 1,
         },
       },
