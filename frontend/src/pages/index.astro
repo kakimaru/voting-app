@@ -93,12 +93,10 @@ const title = "Home";
   fetchUserData();
 
   socket.on("newUserConnected", (message) => {
-    console.log(message);
     alert(message);
   });
 
   socket.on("welcome", (message) => {
-    console.log(message);
     alert(message);
   });
 </script>

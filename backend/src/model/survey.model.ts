@@ -1,6 +1,4 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { create } from 'sortablejs';
-import { createDocumentRegistry } from 'typescript';
 
 interface ISurvey extends Document {
   question: string;
