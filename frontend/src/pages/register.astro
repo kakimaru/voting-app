@@ -38,6 +38,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 </style>
 
 <script is:inline type="module">
+  const URL = "http://localhost:3000"
   document.addEventListener("DOMContentLoaded", async () => {
     const loadingElement = document.getElementById("loading");
     const sectionElement = document.querySelector("section");
@@ -54,7 +55,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       try {
         showLoading();
 
-        const res = await fetch("http://localhost:3000/api/users/check-login", {
+        const res = await fetch(`${URL}/api/users/check-login`, {
           method: "GET",
           credentials: "include",
         });

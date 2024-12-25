@@ -43,6 +43,7 @@ import Logo from "./Logo.astro";
 </style>
 
 <script is:inline type="module">
+  const URL = "http://localhost:3000"
   document.addEventListener("DOMContentLoaded", async () => {
     const headerInner = document.querySelector(".headerInner");
 
@@ -50,7 +51,7 @@ import Logo from "./Logo.astro";
 
     async function checkLoginStatus() {
       try {
-        const res = await fetch("http://localhost:3000/api/users/check-login", {
+        const res = await fetch(`${URL}/api/users/check-login`, {
           method: "GET",
           credentials: "include",
         });
@@ -58,7 +59,6 @@ import Logo from "./Logo.astro";
 
         if (isLoggedIn) {
           const logoutLink = document.createElement("a");
-          // logoutLink.href = "/lp";
           logoutLink.id = "logout";
           logoutLink.textContent = "Logout";
           logoutLink.className = "logouBtn";
@@ -68,7 +68,7 @@ import Logo from "./Logo.astro";
           logoutLink.addEventListener("click", function (event) {
             event.preventDefault(); 
         
-            fetch("http://localhost:3000/api/users/logout", {
+            fetch(`${URL}/api/users/logout`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -77,7 +77,7 @@ import Logo from "./Logo.astro";
             })
               .then((res) => {
                 if (res.ok) {
-                  return fetch("http://localhost:3000/api/users/check-login", {
+                  return fetch(`${URL}/api/users/check-login`, {
                     method: "GET",
                     credentials: "include",
                     headers: {

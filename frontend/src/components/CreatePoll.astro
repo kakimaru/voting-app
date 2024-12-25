@@ -1,8 +1,12 @@
+---
+const URL = import.meta.env.PUBLIC_URL
+---
+
 <div class="addNew">
   <h2 class="title"><span class="icon">+</span> Create new Poll</h2>
   <form
     id="create-poll-form"
-    action="http://localhost:3000/api/surveys/create"
+    action={`${URL}/api/surveys/create`}
     method="post"
   >
     <div class="form-wrap">
@@ -53,6 +57,7 @@
 <script>
   import { io } from "socket.io-client";
   import Chart from "chart.js/auto";
+  const URL = "http://localhost:3000"
 
   interface PollData {
     _id: string;
@@ -129,7 +134,7 @@ colorInput.style.webkitAppearance = "none";
     let votes: number[] = [];
     let chart: Chart;
 
-    const socket = io("http://localhost:3000");
+    const socket = io(URL);
 
     socket.on("newPoll", (data) => {
       showPollResults(data);
@@ -238,7 +243,7 @@ if (optionsinput) {
 
     async function vote(data: PollData, optionIndex: number) {
       try {
-        const response = await fetch("http://localhost:3000/api/surveys/vote", {
+        const response = await fetch(`${URL}/api/surveys/vote`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ surveyId: data._id, optionIndex }),

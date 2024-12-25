@@ -4,9 +4,10 @@
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script type="module">
+<script is:inline type="module">
+  const URL = "http://localhost:3000"
   import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
-  const socket = io("http://localhost:3000");
+  const socket = io(URL);
   let surveys = [];
 
   socket.on("surveyDeleted", (surveyId) => {
@@ -41,7 +42,7 @@
 
   document.addEventListener("DOMContentLoaded", async () => {
     const surveysContainer = document.getElementById("surveys-container");
-    const response = await fetch("http://localhost:3000/api/surveys", {
+    const response = await fetch(`${URL}/api/surveys`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -131,7 +132,7 @@
 
   async function vote(surveyId, optionIndex, surveyElement, survey) {
     try {
-      const response = await fetch("http://localhost:3000/api/surveys/vote", {
+      const response = await fetch(`${URL}/api/surveys/vote`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ surveyId, optionIndex }),
@@ -160,7 +161,7 @@
   }
   async function deleteSurvey(surveyId) {
     const response = await fetch(
-      `http://localhost:3000/api/surveys/${surveyId}`,
+      `${URL}/api/surveys/${surveyId}`,
       {
         method: "DELETE",
         headers: {
