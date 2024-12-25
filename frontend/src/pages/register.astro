@@ -3,11 +3,13 @@ import FormSubInfo from "../components/FormSubInfo.astro";
 import Loading from "../components/Loading.astro";
 import RegisterForm from "../components/RegisterForm.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const apiUrl = import.meta.env.PUBLIC_URL || 'http://localhost:3000';
 ---
 
 <BaseLayout>
   <Loading id="loading" />
-  <section>
+  <section data-api-url={apiUrl}>
     <h1>Register Account</h1>
     <RegisterForm />
     <FormSubInfo
@@ -38,7 +40,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 </style>
 
 <script is:inline type="module">
-  const URL = "http://localhost:3000"
+  const sectionElement = document.querySelector("section");
+  const URL = sectionElement.dataset.apiUrl;
+
   document.addEventListener("DOMContentLoaded", async () => {
     const loadingElement = document.getElementById("loading");
     const sectionElement = document.querySelector("section");

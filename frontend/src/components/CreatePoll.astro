@@ -1,12 +1,12 @@
 ---
-const URL = import.meta.env.PUBLIC_URL
+const apiUrl = import.meta.env.PUBLIC_URL || 'http://localhost:3000';
 ---
 
-<div class="addNew">
+<div class="addNew" data-api-url={apiUrl}>
   <h2 class="title"><span class="icon">+</span> Create new Poll</h2>
   <form
     id="create-poll-form"
-    action={`${URL}/api/surveys/create`}
+    action={`${apiUrl}/api/surveys/create`}
     method="post"
   >
     <div class="form-wrap">
@@ -57,7 +57,9 @@ const URL = import.meta.env.PUBLIC_URL
 <script>
   import { io } from "socket.io-client";
   import Chart from "chart.js/auto";
-  const URL = "http://localhost:3000"
+  const sectionElement = document.querySelector("section")!;
+  const URL = sectionElement.dataset.apiUrl;
+
 
   interface PollData {
     _id: string;
@@ -102,13 +104,13 @@ const URL = import.meta.env.PUBLIC_URL
       colorInput.name = `color${optionsWrap.childElementCount + 1}`;
       colorInput.required = true;
       colorInput.style.padding = "0";
-colorInput.style.border = "none"; 
-colorInput.style.width = "30px";
-colorInput.style.height = "30px"; 
-colorInput.style.borderRadius = "50%";
-colorInput.style.cursor = "pointer"; 
-colorInput.style.backgroundColor = "transparent"; 
-colorInput.style.webkitAppearance = "none";
+      colorInput.style.border = "none"; 
+      colorInput.style.width = "30px";
+      colorInput.style.height = "30px"; 
+      colorInput.style.borderRadius = "50%";
+      colorInput.style.cursor = "pointer"; 
+      colorInput.style.backgroundColor = "transparent"; 
+      colorInput.style.webkitAppearance = "none";
 
       optionsWrap.appendChild(colorInput);
     }

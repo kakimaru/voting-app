@@ -1,10 +1,12 @@
 ---
 import "../styles/global.css";
 import Logo from "./Logo.astro";
+
+const apiUrl = import.meta.env.PUBLIC_URL || 'http://localhost:3000';
 ---
 
 <header>
-  <div class="headerInner">
+  <div class="headerInner" data-api-url={apiUrl}>
     <Logo />
   </div>
 </header>
@@ -43,7 +45,9 @@ import Logo from "./Logo.astro";
 </style>
 
 <script is:inline type="module">
-  const URL = "http://localhost:3000"
+  const sectionElement = document.querySelector("section");
+  const URL = sectionElement.dataset.apiUrl;
+
   document.addEventListener("DOMContentLoaded", async () => {
     const headerInner = document.querySelector(".headerInner");
 

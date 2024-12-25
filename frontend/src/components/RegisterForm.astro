@@ -1,9 +1,9 @@
 ---
-const URL = import.meta.env.PUBLIC_URL
+const apiUrl = import.meta.env.PUBLIC_URL || 'http://localhost:3000';
 ---
 <form
   id="register-form"
-  action=`${URL}/api/users/register`
+  action=`${apiUrl}/api/users/register`
   method="post"
 >
   <div class="form-wrap">

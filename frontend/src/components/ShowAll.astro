@@ -1,11 +1,16 @@
-<section>
+---
+const apiUrl = import.meta.env.PUBLIC_URL || 'http://localhost:3000';
+---
+<section data-api-url={apiUrl}>
   <h2>Join a poll</h2>
   <div id="surveys-container" class="pollContainer"></div>
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script is:inline type="module">
-  const URL = "http://localhost:3000"
+  const sectionElement = document.querySelector("section");
+  const URL = sectionElement.dataset.apiUrl;
+
   import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
   const socket = io(URL);
   let surveys = [];
