@@ -46,13 +46,14 @@ const url = import.meta.env.PUBLIC_URL;
           credentials: "include",
         });
 
-        if (!res.ok) window.location.href = "/login";
-        else throw new Error(`Unexpected response status: ${res.status}`);
-
-        const { isLoggedIn } = await res.json();
-
-        if (!isLoggedIn) {
-          window.location.href = "/login";
+        if (res.ok) {
+          const { isLoggedIn } = await res.json();
+          if (!isLoggedIn) {
+            window.location.href = "/login";
+            return;
+          }
+        } else {
+          throw new Error(`Unexpected response status: ${res.status}`);
         }
       } catch (error) {
         console.error("Error checking login status:", error);
@@ -80,6 +81,10 @@ const url = import.meta.env.PUBLIC_URL;
       });
 
       if (!response.ok) {
+        if (response.status === 403 || response.status === 401) {
+          window.location.href = "/login";
+          return
+        }
         throw new Error(`Error: ${response.statusText}`);
       }
 
@@ -93,6 +98,7 @@ const url = import.meta.env.PUBLIC_URL;
       console.error("Error loading user data:", error);
       const pollTitle = document.getElementById("pollTitle");
       pollTitle.textContent = "Error loading user data.";
+      window.location.href = "/login";
     }
   }
 

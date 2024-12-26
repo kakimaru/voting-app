@@ -87,12 +87,30 @@ const logout = async (req: Request, res: Response) => {
 };
 
 // check login
+// const checkLogin = (req: Request, res: Response): void => {
+//   if (req.user) {
+//     res.status(200).json({ isLoggedIn: true });
+//   } else {
+//     res.status(401).json({ isLoggedIn: false });
+//   }
+// };
 const checkLogin = (req: Request, res: Response): void => {
-  if (req.user) {
-    res.status(200).json({ isLoggedIn: true });
-  } else {
-    res.status(401).json({ isLoggedIn: false });
+  const token = req.cookies.jwt;
+
+  if (!token) {
+    res.status(200).json({ isLoggedIn: false });
+    return;
   }
+
+  jwt.verify(token, process.env.JWT_SECRET!, (err: Error | null, decoded: any) => {
+    if (err) {
+      console.error("Invalid token:", err.message);
+      res.status(200).json({ isLoggedIn: false });
+      return;
+    }
+
+    res.status(200).json({ isLoggedIn: true });
+  });
 };
 
 export default {

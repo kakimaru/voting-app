@@ -12,5 +12,6 @@ userRouter.post("/register", user_controller_1.default.register);
 userRouter.post("/login", user_controller_1.default.login);
 userRouter.get("/profile", auth_1.default, user_controller_1.default.userProfile);
 userRouter.post("/logout", auth_1.default, user_controller_1.default.logout);
-userRouter.get("/check-login", auth_1.default, user_controller_1.default.checkLogin);
+// userRouter.get("/check-login", authenticateToken, userController.checkLogin);
+userRouter.get("/check-login", user_controller_1.default.checkLogin);
 exports.default = userRouter;

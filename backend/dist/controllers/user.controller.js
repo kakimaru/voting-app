@@ -85,13 +85,27 @@ const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(200).json({ message: "Logout successful" });
 });
 // check login
+// const checkLogin = (req: Request, res: Response): void => {
+//   if (req.user) {
+//     res.status(200).json({ isLoggedIn: true });
+//   } else {
+//     res.status(401).json({ isLoggedIn: false });
+//   }
+// };
 const checkLogin = (req, res) => {
-    if (req.user) {
+    const token = req.cookies.jwt;
+    if (!token) {
+        res.status(200).json({ isLoggedIn: false });
+        return;
+    }
+    jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) {
+            console.error("Invalid token:", err.message);
+            res.status(200).json({ isLoggedIn: false });
+            return;
+        }
         res.status(200).json({ isLoggedIn: true });
-    }
-    else {
-        res.status(401).json({ isLoggedIn: false });
-    }
+    });
 };
 exports.default = {
     register,
