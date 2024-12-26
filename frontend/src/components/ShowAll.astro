@@ -1,7 +1,8 @@
 ---
-const apiUrl = import.meta.env.PUBLIC_URL || 'http://localhost:3000';
+const apiUrl = import.meta.env.PUBLIC_SERVER_URL || 'http://localhost:3000';
+const url = import.meta.env.PUBLIC_URL;
 ---
-<section data-api-url={apiUrl}>
+<section data-api-url={apiUrl} data-url={url}>
   <h2>Join a poll</h2>
   <div id="surveys-container" class="pollContainer"></div>
 </section>
@@ -9,10 +10,11 @@ const apiUrl = import.meta.env.PUBLIC_URL || 'http://localhost:3000';
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script is:inline type="module">
   const sectionElement = document.querySelector("section");
-  const URL = sectionElement.dataset.apiUrl;
+  const apiUrl = sectionElement.dataset.apiUrl;
+  const url = sectionElement.dataset.url;
 
   import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
-  const socket = io(URL);
+  const socket = io(url);
   let surveys = [];
 
   socket.on("surveyDeleted", (surveyId) => {
@@ -47,7 +49,7 @@ const apiUrl = import.meta.env.PUBLIC_URL || 'http://localhost:3000';
 
   document.addEventListener("DOMContentLoaded", async () => {
     const surveysContainer = document.getElementById("surveys-container");
-    const response = await fetch(`${URL}/api/surveys`, {
+    const response = await fetch(`${apiUrl}/api/surveys`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -137,7 +139,7 @@ const apiUrl = import.meta.env.PUBLIC_URL || 'http://localhost:3000';
 
   async function vote(surveyId, optionIndex, surveyElement, survey) {
     try {
-      const response = await fetch(`${URL}/api/surveys/vote`, {
+      const response = await fetch(`${apiUrl}/api/surveys/vote`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ surveyId, optionIndex }),
@@ -166,7 +168,7 @@ const apiUrl = import.meta.env.PUBLIC_URL || 'http://localhost:3000';
   }
   async function deleteSurvey(surveyId) {
     const response = await fetch(
-      `${URL}/api/surveys/${surveyId}`,
+      `${apiUrl}/api/surveys/${surveyId}`,
       {
         method: "DELETE",
         headers: {

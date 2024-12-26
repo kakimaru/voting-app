@@ -26,26 +26,26 @@ const allowedOrigins = [
 
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:4321", "https://votingapp-seven.vercel.app"],
+    origin: allowedOrigins,
     credentials: true,
   },
 });
 
-// const corsOptions = {
-//   origin: ["http://localhost:4321", "https://votingapp-seven.vercel.app"],
-//   credentials: true,
-// };
-
 const corsOptions = {
-  origin: (origin: string | undefined, callback: (err: Error | null, allowed: boolean) => void) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"), false);
-    }
-  },
+  origin: allowedOrigins,
   credentials: true,
 };
+
+// const corsOptions = {
+//   origin: (origin: string | undefined, callback: (err: Error | null, allowed: boolean) => void) => {
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"), false);
+//     }
+//   },
+//   credentials: true,
+// };
 
 app.use(cors(corsOptions));
 

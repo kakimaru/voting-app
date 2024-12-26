@@ -2,7 +2,8 @@
 import "../styles/global.css";
 import Logo from "./Logo.astro";
 
-const apiUrl = import.meta.env.PUBLIC_URL || 'http://localhost:3000';
+const apiUrl = import.meta.env.PUBLIC_SERVER_URL || 'http://localhost:3000';
+// const url = import.meta.env.PUBLIC_URL;
 ---
 
 <header>
@@ -45,17 +46,15 @@ const apiUrl = import.meta.env.PUBLIC_URL || 'http://localhost:3000';
 </style>
 
 <script is:inline type="module">
-  const sectionElement = document.querySelector("section");
-  const URL = sectionElement.dataset.apiUrl;
-
   document.addEventListener("DOMContentLoaded", async () => {
     const headerInner = document.querySelector(".headerInner");
+    const apiUrl = headerInner.dataset.apiUrl;
 
     if (!headerInner) return;
 
     async function checkLoginStatus() {
       try {
-        const res = await fetch(`${URL}/api/users/check-login`, {
+        const res = await fetch(`${apiUrl}/api/users/check-login`, {
           method: "GET",
           credentials: "include",
         });
@@ -72,7 +71,7 @@ const apiUrl = import.meta.env.PUBLIC_URL || 'http://localhost:3000';
           logoutLink.addEventListener("click", function (event) {
             event.preventDefault(); 
         
-            fetch(`${URL}/api/users/logout`, {
+            fetch(`${apiUrl}/api/users/logout`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -81,7 +80,7 @@ const apiUrl = import.meta.env.PUBLIC_URL || 'http://localhost:3000';
             })
               .then((res) => {
                 if (res.ok) {
-                  return fetch(`${URL}/api/users/check-login`, {
+                  return fetch(`${apiUrl}/api/users/check-login`, {
                     method: "GET",
                     credentials: "include",
                     headers: {

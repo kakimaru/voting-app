@@ -19,24 +19,38 @@ dotenv_1.default.config();
 (0, db_1.default)();
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
+const allowedOrigins = [
+    "http://localhost:4321",
+    "https://votingapp-seven.vercel.app"
+];
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: 'http://localhost:4321',
+        origin: allowedOrigins,
         credentials: true,
     },
 });
 const corsOptions = {
-    origin: 'http://localhost:4321',
+    origin: allowedOrigins,
     credentials: true,
 };
+// const corsOptions = {
+//   origin: (origin: string | undefined, callback: (err: Error | null, allowed: boolean) => void) => {
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"), false);
+//     }
+//   },
+//   credentials: true,
+// };
 app.use((0, cors_1.default)(corsOptions));
 // Middleware
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use((0, cookie_parser_1.default)());
 // Routes
-app.use('/api/users', user_routes_1.default);
-app.use('/api/surveys', survey_routes_1.default);
+app.use("/api/users", user_routes_1.default);
+app.use("/api/surveys", survey_routes_1.default);
 const surveySocket = new survey_socket_1.default(io);
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {

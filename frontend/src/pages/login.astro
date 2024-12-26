@@ -37,7 +37,7 @@ const apiUrl = import.meta.env.PUBLIC_URL || 'http://localhost:3000';
 
 <script is:inline type="module">
   const sectionElement = document.querySelector("section");
-  const URL = sectionElement.dataset.apiUrl;
+  const apiUrl = sectionElement.dataset.apiUrl;
 
   document.addEventListener("DOMContentLoaded", async () => {
     const loadingElement = document.getElementById("loading");
@@ -55,7 +55,7 @@ const apiUrl = import.meta.env.PUBLIC_URL || 'http://localhost:3000';
       try {
         showLoading();
 
-        const res = await fetch(`${URL}/api/users/check-login`, {
+        const res = await fetch(`${apiUrl}/api/users/check-login`, {
           method: "GET",
           credentials: "include",
         });

@@ -5,11 +5,13 @@ import ShowAll from "../components/ShowAll.astro";
 import Loading from "../components/Loading.astro";
 
 const title = "Home";
+const apiUrl = import.meta.env.PUBLIC_SERVER_URL || 'http://localhost:3000';
+const url = import.meta.env.PUBLIC_URL;
 ---
 
 <BaseLayout title={title}>
   <Loading id="loading" />
-  <section>
+  <section data-url={url} data-api-url={apiUrl}>
     <h1 id="pollTitle">Loading...</h1>
     <div>
       <CreatePoll />
@@ -19,11 +21,12 @@ const title = "Home";
 </BaseLayout>
 
 <script is:inline type="module">
-  const URL = "http://localhost:3000"
+  const sectionElement = document.querySelector("section")
+  const url = sectionElement.dataset.url
+  const apiUrl = sectionElement.dataset.apiUrl
 
   document.addEventListener("DOMContentLoaded", async () => {
     const loadingElement = document.getElementById("loading");
-    const sectionElement = document.querySelector("section");
 
     function showLoading() {
       loadingElement.style.display = "block";
@@ -37,7 +40,7 @@ const title = "Home";
       try {
         showLoading();
 
-        const res = await fetch(`${URL}/api/users/check-login`, {
+        const res = await fetch(`${apiUrl}/api/users/check-login`, {
           method: "GET",
           credentials: "include",
         });
@@ -63,11 +66,11 @@ const title = "Home";
 
   import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
 
-  const socket = io(URL);
+  const socket = io(url);
 
   async function fetchUserData() {
     try {
-      const response = await fetch(`${URL}/api/users/profile`, {
+      const response = await fetch(`${apiUrl}/api/users/profile`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
