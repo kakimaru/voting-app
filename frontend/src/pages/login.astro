@@ -3,6 +3,7 @@ import FormSubInfo from "../components/FormSubInfo.astro";
 import Loading from "../components/Loading.astro";
 import LoginForm from "../components/LoginForm.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import "@fontsource/quantico";
 
 const apiUrl = import.meta.env.PUBLIC_URL || 'http://localhost:3000';
 ---
@@ -27,6 +28,7 @@ const apiUrl = import.meta.env.PUBLIC_URL || 'http://localhost:3000';
     gap: 24px;
     place-items: center;
     display: none;
+    font-family: "Quantico", sans-serif;
   }
 
   h1 {
