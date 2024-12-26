@@ -19,6 +19,11 @@ const app = express();
 
 const server = http.createServer(app);
 
+const allowedOrigins = [
+  "http://localhost:4321",
+  "https://votingapp-seven.vercel.app"
+];
+
 const io = new Server(server, {
   cors: {
     origin: ["http://localhost:4321", "https://votingapp-seven.vercel.app"],
@@ -26,8 +31,19 @@ const io = new Server(server, {
   },
 });
 
+// const corsOptions = {
+//   origin: ["http://localhost:4321", "https://votingapp-seven.vercel.app"],
+//   credentials: true,
+// };
+
 const corsOptions = {
-  origin: ["http://localhost:4321", "https://votingapp-seven.vercel.app"],
+  origin: (origin: string | undefined, callback: (err: Error | null, allowed: boolean) => void) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"), false);
+    }
+  },
   credentials: true,
 };
 
