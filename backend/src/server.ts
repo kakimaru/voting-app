@@ -9,6 +9,7 @@ import connectDB from "./config/db";
 import surveyRoutes from "./routes/survey.routes";
 import SurveySocket from "./socket/survey.socket";
 import userRouter from "./routes/user.routes";
+import corsMiddleware from "./middleware/cors";
 
 dotenv.config();
 
@@ -36,20 +37,10 @@ const corsOptions = {
   credentials: true,
 };
 
-// const corsOptions = {
-//   origin: (origin: string | undefined, callback: (err: Error | null, allowed: boolean) => void) => {
-//     if (!origin || allowedOrigins.includes(origin)) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error("Not allowed by CORS"), false);
-//     }
-//   },
-//   credentials: true,
-// };
-
 app.use(cors(corsOptions));
 
 // Middleware
+app.use(corsMiddleware)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
