@@ -35,6 +35,7 @@ const io = new Server(server, {
 const corsOptions = {
   origin: allowedOrigins,
   credentials: true,
+  httpOnly: true,
 };
 
 app.use(cors(corsOptions));
