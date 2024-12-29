@@ -49,8 +49,8 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const token = jsonwebtoken_1.default.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET, { expiresIn: "1h" });
         res.cookie("jwt", token, {
             httpOnly: true,
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             secure: process.env.NODE_ENV === "production",
+            sameSite: "none",
             maxAge: 24 * 60 * 60 * 1000,
         });
         res.status(200).json({ message: "Login successful" });

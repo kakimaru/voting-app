@@ -14,6 +14,7 @@ const db_1 = __importDefault(require("./config/db"));
 const survey_routes_1 = __importDefault(require("./routes/survey.routes"));
 const survey_socket_1 = __importDefault(require("./socket/survey.socket"));
 const user_routes_1 = __importDefault(require("./routes/user.routes"));
+const cors_2 = __importDefault(require("./middleware/cors"));
 dotenv_1.default.config();
 // Database
 (0, db_1.default)();
@@ -32,19 +33,11 @@ const io = new socket_io_1.Server(server, {
 const corsOptions = {
     origin: allowedOrigins,
     credentials: true,
+    httpOnly: true,
 };
-// const corsOptions = {
-//   origin: (origin: string | undefined, callback: (err: Error | null, allowed: boolean) => void) => {
-//     if (!origin || allowedOrigins.includes(origin)) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error("Not allowed by CORS"), false);
-//     }
-//   },
-//   credentials: true,
-// };
 app.use((0, cors_1.default)(corsOptions));
 // Middleware
+app.use(cors_2.default);
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use((0, cookie_parser_1.default)());

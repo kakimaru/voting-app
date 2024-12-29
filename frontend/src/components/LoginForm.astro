@@ -16,6 +16,7 @@ const apiUrl = import.meta.env.PUBLIC_SERVER_URL || 'http://localhost:3000';
     <input type="password" id="password" name="password" required />
   </div>
   <button type="submit">Login</button>
+  <p class="subInfo">If you’re using Safari, please disable “Prevent Cross-Site Tracking” in your Settings to use this service.</p>
 </form>
 
 <style>
@@ -43,6 +44,13 @@ const apiUrl = import.meta.env.PUBLIC_SERVER_URL || 'http://localhost:3000';
     border: 1px solid var(--color-grey);
     background-color: var(--color-grey);
     border-radius: 4px;
+  }
+
+  .subInfo {
+    font-size: 13px;
+    line-height: 140%;
+    font-weight: normal;
+    color: var(--color-grey-dark);
   }
 
   button {
